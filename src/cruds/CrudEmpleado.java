@@ -5,7 +5,15 @@ import java.sql.Connection;
 import modelo.Empleado;
 
 public class CrudEmpleado {
-    Conexion con = new Conexion();
+    Conexion con;
+
+    public CrudEmpleado() {
+        con = new Conexion();
+    }
+    
+   
+    
+    
     
     
 public boolean insert(Empleado em){
