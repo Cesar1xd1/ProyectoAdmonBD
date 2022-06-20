@@ -11,11 +11,6 @@ public class CrudEmpleado {
         con = new Conexion();
     }
     
-   
-    
-    
-    
-    
 public boolean insert(Empleado em){
    boolean resultado = false;
    String sql = "INSERT INTO employees VALUES('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";

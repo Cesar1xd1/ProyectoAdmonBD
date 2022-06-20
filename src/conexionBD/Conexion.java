@@ -32,7 +32,7 @@ public class Conexion {
             // Database connect
             // Conectamos con la base de datos
             con = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/prueba",
+                    "jdbc:postgresql://localhost:5432/employees",
                     "cesar1xd1", "1234");
  
             boolean valid = con.isValid(50000);
