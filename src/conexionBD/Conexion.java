@@ -15,8 +15,8 @@ import java.sql.*;
  */
 public class Conexion {
     Connection con = null;
-    private static Statement stn;
-    //private static ResultSet rs;
+    
+    
     
     
     public Connection connectDatabase() {
@@ -43,17 +43,8 @@ public class Conexion {
         return con;
     } 
    
-    public boolean ejecutarInstruccion(String sql) {
-		try {
-			stn = con.createStatement();
-			stn.execute(sql);
-                        stn.close();
-			return true;
-		} catch (SQLException e) {
-			return false;
-		}
-		
-	}
+    
+	
     
     
     public static void main(String[] args) {

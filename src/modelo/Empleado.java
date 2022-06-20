@@ -47,6 +47,11 @@ public class Empleado {
         return apellido;
     }
 
+    @Override
+    public String toString() {
+        return "Empleado{" + "noEmpleado=" + noEmpleado + ", fechaNacimiento=" + fechaNacimiento + ", nombre=" + nombre + ", apellido=" + apellido + ", genero=" + genero + ", fechaContrato=" + fechaContrato + '}';
+    }
+
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }

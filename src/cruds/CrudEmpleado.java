@@ -5,16 +5,25 @@ import java.sql.Connection;
 import modelo.Empleado;
 
 public class CrudEmpleado {
-    Conexion con;
+    Conexion con = new Conexion();
 
-    public CrudEmpleado() {
-        con = new Conexion();
-    }
+    
     
 public boolean insert(Empleado em){
    boolean resultado = false;
-   String sql = "INSERT INTO employees VALUES('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";
-   resultado = con.ejecutarInstruccion(sql);
+    try{
+    
+   Connection conexion = con.connectDatabase();
+   java.sql.Statement st = conexion.createStatement();
+   String sql = "INSERT INTO employees (emp_no,birth_date,first_name,last_name,gender,hire_date) VALUES ('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";
+   st.execute(sql);
+   st.close();
+   resultado = true;
+   conexion.close();
+   }catch (Exception e){
+       
+   }
+   
    return resultado;
 }//insert    
     
