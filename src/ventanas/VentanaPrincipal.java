@@ -57,6 +57,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenuEmpleados);
 
         jMenuDepartamentos.setText("Departamentos");
+        jMenuDepartamentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuDepartamentosMouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenuDepartamentos);
 
         jMenuAdministradores.setText("Administradores");
@@ -79,8 +84,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuEmpleadosMouseClicked
-        new VentanaEmpleados().setVisible(true); 
+        new VentanaEmpleados().setVisible(true);
     }//GEN-LAST:event_jMenuEmpleadosMouseClicked
+
+    private void jMenuDepartamentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuDepartamentosMouseClicked
+        new VentanaDepartamentos().setVisible(true);
+    }//GEN-LAST:event_jMenuDepartamentosMouseClicked
 
     /**
      * @param args the command line arguments

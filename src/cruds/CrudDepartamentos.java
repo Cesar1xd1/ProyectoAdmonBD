@@ -42,7 +42,7 @@ public class CrudDepartamentos {
     try{
    Connection conexion = con.connectDatabase();
    java.sql.Statement st = conexion.createStatement();
-   String sql = "UPDATE employees SET dept_name= '"+dep.getNombreDepartamento()+ "' WHERE dept_no = '"+dep.getNoDepartamento()+"';";    
+   String sql = "UPDATE departments SET dept_name= '"+dep.getNombreDepartamento()+ "' WHERE dept_no = '"+dep.getNoDepartamento()+"';";    
    st.execute(sql);
    st.close();
    resultado = true;

@@ -187,6 +187,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         grupoB.add(toggBAltas);
         toggBAltas.setText("Altas");
@@ -538,6 +539,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
        limpiarCajas();
+       atuaclizaTablaSQL("SELECT * FROM employees");
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -623,7 +625,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         tNombre.setText("");
         tApellido.setText("");
         }else if(toggBCambios.isSelected()){
-            String noEm = tnoEmpleado.getText() ;
+        String noEm = tnoEmpleado.getText() ;
         String fNaci = laFecha(cbDiaN, cbMesN, cbAñoN);
         String nombre = tNombre.getText();
         String apellido = tApellido.getText();
@@ -653,8 +655,8 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         }else if(toggBConsultas.isSelected()){
             
             String sql = "SELECT * FROM employees ";
-       if(jComboBFiltroConsulta.getSelectedIndex()==0){
-           if(tnoEmpleado.getText().equals("")){
+            if(jComboBFiltroConsulta.getSelectedIndex()==0){
+            if(tnoEmpleado.getText().equals("")){
                JOptionPane.showMessageDialog(null,"Inmgresa un numero de empleado a buscar");
            }else{
                sql = sql + "WHERE emp_no ::TEXT LIKE'"+tnoEmpleado.getText()+"%'";
@@ -669,7 +671,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
        }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
            
            if(tNombre.getText().equals("")){
-                JOptionPane.showMessageDialog(null,"Inmgresa un Nombre a buscar");
+                JOptionPane.showMessageDialog(null,"Ingresa un Nombre a buscar");
            }else{
                sql = sql + "WHERE first_name LIKE'"+tNombre.getText()+"%'";
                atuaclizaTablaSQL(sql);
@@ -729,6 +731,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
     private void jComboBFiltroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBFiltroConsultaActionPerformed
         limpiarCajas();
+        atuaclizaTablaSQL("SELECT * FROM employees");
         if(jComboBFiltroConsulta.getSelectedIndex()==0){
         tnoEmpleado.setEnabled(true);
         tNombre.setEnabled(false);

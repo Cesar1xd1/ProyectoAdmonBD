@@ -56,9 +56,30 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(getContentPane(), sqle);
 		}
 	}
+    public void contadorR(){
+        if(tabla.getRowCount()==0){
+               JOptionPane.showMessageDialog(null,"No se encontraron registros");
+               atuaclizaTablaSQL("SELECT * FROM departments");
+           }
+        
+    }
+    public void obtenerRegistro() {
+		try {   
+                        tNombre.setText((String)tabla.getValueAt(tabla.getSelectedRow(),1));
+                        tnoDepartamento.setText((String)tabla.getValueAt(tabla.getSelectedRow(),0));
+                        
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Producto no existe");
+			tNombre.setText("");
+                        tnoDepartamento.setText("");
+			
+		}
+		
+	}
     public void limpiarCajas(){
         tnoDepartamento.setText("");
         tNombre.setText("");
+        
         
     }
     public VentanaDepartamentos() {
@@ -94,6 +115,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Numero de Departamento");
 
@@ -103,6 +125,17 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         tnoDepartamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tnoDepartamentoActionPerformed(evt);
+            }
+        });
+        tnoDepartamento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tnoDepartamentoKeyReleased(evt);
+            }
+        });
+
+        tNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tNombreKeyReleased(evt);
             }
         });
 
@@ -142,6 +175,11 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
         escroll.setViewportView(tabla);
 
         bGrupo.add(toggBAltas);
@@ -191,92 +229,90 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(333, 333, 333)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(escroll, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel9)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabel7)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(tnoDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jLfiltroConsulta)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jComboBFiltroConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(40, 40, 40)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnCancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(toggBAltas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(toggBBajas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(toggBCambios)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(toggBConsultas))
+                            .addComponent(escroll, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(toggBAltas)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(tnoDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(jLfiltroConsulta)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBFiltroConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toggBBajas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toggBCambios)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toggBConsultas)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 5, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(57, 57, 57))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(314, 314, 314))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toggBAltas)
-                    .addComponent(toggBBajas)
-                    .addComponent(toggBCambios)
-                    .addComponent(toggBConsultas))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(126, 126, 126))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(btnAccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 39, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(toggBAltas)
+                            .addComponent(toggBBajas)
+                            .addComponent(toggBCambios)
+                            .addComponent(toggBConsultas))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLfiltroConsulta)
                             .addComponent(jComboBFiltroConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(tnoDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(40, 40, 40)
+                            .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(escroll, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(88, 88, 88))
         );
 
         pack();
@@ -288,7 +324,35 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
 
     private void btnAccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccionActionPerformed
         if(toggBAltas.isSelected()){
-             String noDp = tnoDepartamento.getText() ;
+        String noDp = tnoDepartamento.getText() ;
+        String nombre = tNombre.getText();
+        if(noDp.equals("")||nombre.equals("")){
+            JOptionPane.showMessageDialog(null, "Algun campo quedo sin ser llenado");
+        }else{
+             if(noDp.length()>4){
+             JOptionPane.showMessageDialog(null, "El numero de departamento debe ser de maximo 4 digitos ");
+            }else{       
+            Departamento depa = new Departamento(noDp,nombre);
+            CrudDepartamentos cd = new CrudDepartamentos();
+            if(cd.insert(depa)){
+            }else{
+                JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
+            }}
+            atuaclizaTabla(tabla);
+        }
+        }else if(toggBBajas.isSelected()){
+            String i = (tnoDepartamento.getText());
+            CrudDepartamentos cd = new CrudDepartamentos();
+            if(cd.delete(i)){
+                System.out.println("xd");
+            }else{
+                JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
+            }
+            atuaclizaTablaSQL("SELECT * FROM departments");
+            tnoDepartamento.setText("");
+            tNombre.setText("");
+        }else if(toggBCambios.isSelected()){
+            String noDp = tnoDepartamento.getText() ;
         String nombre = tNombre.getText();
         
         if(noDp.equals("")||nombre.equals("")){
@@ -297,37 +361,58 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
              if(noDp.length()>4){
              JOptionPane.showMessageDialog(null, "El numero de departamento debe ser de maximo 4 digitos ");
             }else{   
-                 
             Departamento depa = new Departamento(noDp,nombre);
             CrudDepartamentos cd = new CrudDepartamentos();
-            if(cd.insert(depa)){
+            if(cd.modificar(depa)){
             }else{
                 JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
             }}
-            atuaclizaTabla(tabla);
+            atuaclizaTablaSQL("SELECT * FROM departments");
 
         }
-        }else if(toggBBajas.isSelected()){
-            
-        }else if(toggBCambios.isSelected()){
-            
         }else if(toggBConsultas.isSelected()){
-            
+            String sql = "SELECT * FROM departments ";
+            if(jComboBFiltroConsulta.getSelectedIndex()==0){
+                if(tnoDepartamento.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Campo de No. Departamento Vacio!");
+                }else{
+                    sql = sql + "WHERE dept_no LIKE '"+tnoDepartamento.getText()+"%'";
+                    
+                    atuaclizaTablaSQL(sql);
+                }
+                contadorR();
+            }else if(jComboBFiltroConsulta.getSelectedIndex()==1){
+                if(tNombre.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Campo del Nombre Vacio!");
+                }else{
+                    sql = sql + "WHERE dept_name LIKE '"+tNombre.getText()+"%'";
+                    atuaclizaTablaSQL(sql); 
+                }
+                contadorR();
+            }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
+                if(tnoDepartamento.getText().equals("")||tNombre.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Los campos estan vacios");
+                    atuaclizaTablaSQL("SELECT * FROM departments");
+                }else{
+                    sql = sql + "WHERE dept_no LIKE '"+tnoDepartamento.getText() +"%' AND dept_name LIKE '"+tNombre.getText() + "%'";
+                    System.out.println(sql);
+                    atuaclizaTablaSQL(sql);
+                }
+                contadorR();
+            }
         }else{
             JOptionPane.showMessageDialog(getContentPane(), "Ninguna opcion Seleccionada");
         }
     }//GEN-LAST:event_btnAccionActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        tnoDepartamento.setText("");
-        tNombre.setText("");
+        limpiarCajas();
+        atuaclizaTablaSQL("SELECT * FROM departments");
 
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
-        setVisible(false);
-
+       setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void toggBAltasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBAltasActionPerformed
@@ -374,6 +459,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
 
     private void jComboBFiltroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBFiltroConsultaActionPerformed
         limpiarCajas();
+        atuaclizaTablaSQL("SELECT * FROM departments");
         if(jComboBFiltroConsulta.getSelectedIndex()==0){
             tnoDepartamento.setEnabled(true);
             tNombre.setEnabled(false);
@@ -386,32 +472,27 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBFiltroConsultaActionPerformed
 
+    private void tnoDepartamentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoDepartamentoKeyReleased
+        if(toggBBajas.isSelected()||toggBCambios.isSelected()){
+            buscarPorCampo();
+        }
+    }//GEN-LAST:event_tnoDepartamentoKeyReleased
+
+    private void tNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tNombreKeyReleased
+         if(toggBBajas.isSelected()){
+            buscarPorCampo();
+        }
+    }//GEN-LAST:event_tNombreKeyReleased
+
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        if(toggBBajas.isSelected()||toggBCambios.isSelected()){
+            obtenerRegistro();
+        }
+    }//GEN-LAST:event_tablaMouseClicked
+
     
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaDepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaDepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaDepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaDepartamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VentanaDepartamentos().setVisible(true);
