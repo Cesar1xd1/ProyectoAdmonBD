@@ -575,6 +575,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         cbAñoN.setEnabled(false);
         cbGenero.setEnabled(false);
         tApellido.setEnabled(false);
+        jComboBFiltroConsulta.setSelectedIndex(0);
          jLfiltroConsulta.setVisible(true);
         jComboBFiltroConsulta.setVisible(true);
           limpiarCajas();
