@@ -8,6 +8,7 @@ import cruds.CrudEmpleado;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Date;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -43,6 +44,74 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         String a = (String) año.getSelectedItem();
         return a+"/"+m+"/"+d;
     }
+    public void obtenerRegistro() {
+	
+            try {   
+                        int i = (int)tabla.getValueAt(tabla.getSelectedRow(), 0);
+                        tnoEmpleado.setText(i+"");
+			Date fn =  (Date) tabla.getValueAt(tabla.getSelectedRow(), 1);
+                        String sfn = fn+"";
+			String[] na = sfn.split("-");
+                        cbDiaN.setSelectedItem(na[2]);
+                        cbMesN.setSelectedItem(na[1]);
+                        cbAñoN.setSelectedItem(na[0]);
+                        tNombre.setText((String) tabla.getValueAt(tabla.getSelectedRow(), 2));
+                        tApellido.setText((String)tabla.getValueAt(tabla.getSelectedRow(), 3));
+                        String genero = (String) tabla.getValueAt(tabla.getSelectedRow(),4);
+                        if(genero.equals("M")){
+                            cbGenero.setSelectedIndex(0);
+                        }else{
+                            cbGenero.setSelectedIndex(1);
+                        }
+                        Date fc = (Date) tabla.getValueAt(tabla.getSelectedRow(), 5);
+			String sfc = fc+"";
+                        String[] co = sfc.split("/");
+                        cbDiaC.setSelectedItem(co[2]);
+                        cbMesC.setSelectedItem(co[1]);
+                        cbAñoC.setSelectedItem(co[0]);
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Producto no existe");
+			tNombre.setText("");
+                        tApellido.setText("");
+			
+		}
+		
+	}
+    public void limpiarCajas(){
+        tnoEmpleado.setText("");
+        tNombre.setText("");
+        tApellido.setText("");
+    }
+    
+    
+    public void atuaclizaTablaSQL(String sql) {
+		try {
+			String controlador = "org.postgresql.Driver";
+			String url = "jdbc:postgresql://localhost:5432/employees";
+			
+			ResulSetTableModel modeloDatos = null;
+			try {
+				modeloDatos = new ResulSetTableModel(controlador, url, sql);
+			}catch (ClassNotFoundException ex) {
+				JOptionPane.showMessageDialog(getContentPane(), ex);
+			}
+			tabla.setModel(modeloDatos);
+		}//Try
+		catch (Exception sqle) {
+			JOptionPane.showMessageDialog(getContentPane(), sqle);
+		}
+	}
+     public void buscarPorCampos(){
+        if(tnoEmpleado.getText().isEmpty()&&!tNombre.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM employees WHERE first_name LIKE'"+tNombre.getText()+"%'");
+        }else if(!tnoEmpleado.getText().isEmpty()&&tNombre.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM employees WHERE emp_no::TEXT LIKE '"+tnoEmpleado.getText()+"%'");
+        }else if(tnoEmpleado.getText().isEmpty()&&tNombre.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM employees");
+        }else if(!tnoEmpleado.getText().isEmpty()&&!tNombre.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM employees WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND first_name LIKE'"+tNombre.getText()+"%'");
+        }
+    }  
     
     public VentanaEmpleados() {
         initComponents();
@@ -201,12 +270,24 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
         cbMesN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
 
+        tnoEmpleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tnoEmpleadoKeyReleased(evt);
+            }
+        });
+
         jLabel8.setText("Fecha de Nacimiento");
 
         cbAñoN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1920", "1921", "1922", "1923", "1924", "1925", "1926", "1927", "1928", "1929", "1930", "1931", "1932", "1933", "1934", "1935", "1936", "1937", "1938", "1939", "1940", "1941", "1942", "1943", "1944", "1945", "1946", "1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958", "1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035", "2036", "2037", "2038", "2039", "2040", "2041", "2042", "2043", "2044", "2045", "2046", "2047", "2048", "2049", "2050", "2051", "2052", "2053", "2054", "2055" }));
         cbAñoN.setSelectedIndex(80);
 
         jLabel5.setText("Dia");
+
+        tNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tNombreKeyReleased(evt);
+            }
+        });
 
         jLabel6.setText("Mes");
 
@@ -383,18 +464,38 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     private void toggBBajasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBBajasActionPerformed
         btnAccion.setText("Eliminar");
         btnAccion.setBackground(Color.red);
+        tnoEmpleado.setEnabled(true);
+        tNombre.setEnabled(true);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(false);
+        limpiarCajas();
     }//GEN-LAST:event_toggBBajasActionPerformed
 
     private void toggBAltasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBAltasActionPerformed
-          btnAccion.setText("Añadir");
-          btnAccion.setBackground(Color.green);
+        btnAccion.setText("Añadir");
+        btnAccion.setBackground(Color.green);
+        tnoEmpleado.setEnabled(true);
+        tNombre.setEnabled(true);
+        cbDiaC.setEnabled(true);
+        cbMesC.setEnabled(true);
+        cbAñoC.setEnabled(true);
+        cbDiaN.setEnabled(true);
+        cbMesN.setEnabled(true);
+        cbAñoN.setEnabled(true);
+        cbGenero.setEnabled(true);
+        tApellido.setEnabled(true);
+        limpiarCajas();
          
     }//GEN-LAST:event_toggBAltasActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        tnoEmpleado.setText("");
-        tNombre.setText("");
-        tApellido.setText("");
+       limpiarCajas();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -404,11 +505,13 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     private void toggBCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBCambiosActionPerformed
         btnAccion.setText("Guardar");
         btnAccion.setBackground(Color.MAGENTA);
+        limpiarCajas();
     }//GEN-LAST:event_toggBCambiosActionPerformed
 
     private void toggBConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBConsultasActionPerformed
        btnAccion.setText("Buscar");
           btnAccion.setBackground(Color.BLUE);
+          limpiarCajas();
     }//GEN-LAST:event_toggBConsultasActionPerformed
 
     private void btnAccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccionActionPerformed
@@ -442,6 +545,18 @@ public class VentanaEmpleados extends javax.swing.JFrame {
             }
         }else if(toggBBajas.isSelected()){
             
+        
+            String i = (tnoEmpleado.getText());
+        CrudEmpleado ce = new CrudEmpleado();
+        if(ce.delete(i)){
+            
+        }else{
+            JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
+        }
+        atuaclizaTablaSQL("SELECT * FROM employees");
+        tnoEmpleado.setText("");
+        tNombre.setText("");
+        tApellido.setText("");
         }else if(toggBCambios.isSelected()){
             
         }else if(toggBConsultas.isSelected()){
@@ -450,6 +565,18 @@ public class VentanaEmpleados extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(getContentPane(), "Ninguna opcion seleccionada");
         }
     }//GEN-LAST:event_btnAccionActionPerformed
+
+    private void tnoEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoEmpleadoKeyReleased
+        if(toggBBajas.isSelected()){
+            buscarPorCampos();
+        }
+    }//GEN-LAST:event_tnoEmpleadoKeyReleased
+
+    private void tNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tNombreKeyReleased
+         if(toggBBajas.isSelected()){
+            buscarPorCampos();
+        }
+    }//GEN-LAST:event_tNombreKeyReleased
 
 
     public static void main(String args[]) {

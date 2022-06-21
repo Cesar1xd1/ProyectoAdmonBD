@@ -12,7 +12,6 @@ public class CrudEmpleado {
 public boolean insert(Empleado em){
    boolean resultado = false;
     try{
-    
    Connection conexion = con.connectDatabase();
    java.sql.Statement st = conexion.createStatement();
    String sql = "INSERT INTO employees (emp_no,birth_date,first_name,last_name,gender,hire_date) VALUES ('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";
@@ -20,12 +19,24 @@ public boolean insert(Empleado em){
    st.close();
    resultado = true;
    conexion.close();
-   }catch (Exception e){
-       
+   }catch (Exception e){ 
    }
-   
    return resultado;
 }//insert    
+public boolean delete(String ne){
+   boolean resultado = false;
+    try{
+   Connection conexion = con.connectDatabase();
+   java.sql.Statement st = conexion.createStatement();
+   String sql = "DELETE FROM employees WHERE emp_no = '"+ne+"';";
+   st.execute(sql);
+   st.close();
+   resultado = true;
+   conexion.close();
+   }catch (Exception e){ 
+   }
+   return resultado;
+}//insert 
     
     
 }
