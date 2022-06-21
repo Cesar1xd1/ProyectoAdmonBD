@@ -4,21 +4,59 @@
  */
 package ventanas;
 
+import cruds.CrudAdministrador;
+import cruds.CrudEmpleado;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import modelo.Administrador;
+import modelo.Empleado;
 
 /**
  *
  * @author cesar
  */
 public class VentanaAdministradores extends javax.swing.JFrame {
-            public void atuaclizaTablaSQL(String sql) {
+    String controlador = "org.postgresql.Driver";
+    String url = "jdbc:postgresql://localhost:5432/employees";
+    public void atuaclizaTabla(JTable tabla) {
 		try {
-			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
 			
+			String Consulta = "SELECT * FROM dept_manager";		
+			ResulSetTableModel modeloDatos = null;
+			try {
+				modeloDatos = new ResulSetTableModel(controlador, url, Consulta);
+			}catch (ClassNotFoundException ex) {
+				JOptionPane.showMessageDialog(getContentPane(), ex);
+			}
+			tabla.setModel(modeloDatos);
+		}//Try
+		catch (Exception sqle) {
+			JOptionPane.showMessageDialog(getContentPane(), sqle);
+		}
+	}     
+    public void atuaclizaTablaOtra(String sql,JTable t) {
+		try {
+			
+			
+			ResulSetTableModel modeloDatos = null;
+			try {
+				modeloDatos = new ResulSetTableModel(controlador, url, sql);
+			}catch (ClassNotFoundException ex) {
+				JOptionPane.showMessageDialog(getContentPane(), ex);
+			}
+			t.setModel(modeloDatos);
+		}//Try
+		catch (Exception sqle) {
+			JOptionPane.showMessageDialog(getContentPane(), sqle);
+		}
+	}    
+        public void atuaclizaTablaSQL(String sql) {
+		try {
+		
 			ResulSetTableModel modeloDatos = null;
 			try {
 				modeloDatos = new ResulSetTableModel(controlador, url, sql);
@@ -31,9 +69,38 @@ public class VentanaAdministradores extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(getContentPane(), sqle);
 		}
 	}
+            public boolean buscar(){
+       int cem = Integer.parseInt(tnoEmpleado.getText());
+       String cdp = tnoDepartamento.getText();
+       String sqlem = "SELECT * FROM employees " +  ("WHERE emp_no ='"+cem+"'");
+       String sqldp = "SELECT * FROM departments " + ("WHERE dept_no ='"+cdp+"'");
+         atuaclizaTablaOtra(sqlem,tablaem);
+         atuaclizaTablaOtra(sqldp,tabladp);
+         int countem = tablaem.getRowCount();
+         int countdp = tabladp.getRowCount();
+         if(countem==0){
+             JOptionPane.showMessageDialog(null, "ese empleado no existe");
+             return false;
+         }else{
+         if(countdp==0){
+                 JOptionPane.showMessageDialog(null, "Ese departamento no existe");
+                 return false;
+             }else{
+             return true;
+         }
+             
+         }
+       
+     }
     public void limpiarCajas(){
         tnoEmpleado.setText("");
         tnoDepartamento.setText("");
+    }
+     public String laFecha(JComboBox dia,JComboBox mes,JComboBox año){
+        String d = (String) dia.getSelectedItem();
+        String m = (String) mes.getSelectedItem();
+        String a = (String) año.getSelectedItem();
+        return a+"/"+m+"/"+d;
     }
     public VentanaAdministradores() {
         initComponents();
@@ -428,11 +495,46 @@ public class VentanaAdministradores extends javax.swing.JFrame {
     }//GEN-LAST:event_cbDiaTActionPerformed
 
     private void btnAccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccionActionPerformed
+     if(toggBAltas.isSelected()){
+     String noEm = tnoEmpleado.getText();
+     String noDp = tnoDepartamento.getText();
+     String fFrom = laFecha(cbDiaF, cbMesF, cbAñoF);
+     String fTo = laFecha(cbDiaT, cbMesT, cbAñoT);
+     if(noEm.equals("")||noDp.equals("")){
+         JOptionPane.showMessageDialog(null, "Algun campo quedo sin ser llenado");
+     }else{
+          if(noDp.length()>4){
+             JOptionPane.showMessageDialog(null, "El numero de departamento debe ser de maximo 4 digitos ");
+          }else{
+              boolean x = buscar();
+              if(x==true){
+            int neI = Integer.parseInt(noEm);
+            Administrador ad = new Administrador(neI, noDp,fFrom,fTo);
+            CrudAdministrador ca = new CrudAdministrador();
+            if(ca.insert(ad)){
+            }else{
+                    JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");    
+                        }
+                
+              }
+                
+          }
+            
+     }
+       atuaclizaTabla(tabla1);
+        }else if(toggBBajas.isSelected()){
         
+        }else if(toggBCambios.isSelected()){
+        
+        }else if(toggBConsultas.isSelected()){
+     
+        }else{
+            JOptionPane.showMessageDialog(getContentPane(), "Ninguna opcion seleccionada");
+        }
     }//GEN-LAST:event_btnAccionActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        
+        limpiarCajas();
 
     }//GEN-LAST:event_btnLimpiarActionPerformed
 

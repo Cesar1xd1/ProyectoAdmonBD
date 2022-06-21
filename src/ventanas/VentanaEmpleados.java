@@ -20,11 +20,12 @@ import modelo.Empleado;
  * @author cesar
  */
 public class VentanaEmpleados extends javax.swing.JFrame {
-        public void atuaclizaTabla(JTable tabla) {
+    String controlador = "org.postgresql.Driver";
+    String url = "jdbc:postgresql://localhost:5432/employees";    
+    public void atuaclizaTabla(JTable tabla) {
 		
         try {
-			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
+			
 			String Consulta = "SELECT * FROM employees";		
 			ResulSetTableModel modeloDatos = null;
 			try {
@@ -90,8 +91,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     
     public void atuaclizaTablaSQL(String sql) {
 		try {
-			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
+			
 			
 			ResulSetTableModel modeloDatos = null;
 			try {

@@ -12,6 +12,8 @@ import modelo.Departamento;
 
 
 public class VentanaDepartamentos extends javax.swing.JFrame {
+   			String controlador = "org.postgresql.Driver";
+			String url = "jdbc:postgresql://localhost:5432/employees";
     public void buscarPorCampo(){
         if(tnoDepartamento.getText().isEmpty() && !tNombre.getText().isEmpty()){
             atuaclizaTablaSQL("SELECT * FROM departments WHERE dept_name LIKE'"+tNombre.getText()+"%'");
@@ -25,8 +27,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         } 
     public void atuaclizaTabla(JTable tabla) {
 		try {
-			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
+
 			String Consulta = "SELECT * FROM departments";		
 			ResulSetTableModel modeloDatos = null;
 			try {
@@ -42,8 +43,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
 	}
     public void atuaclizaTablaSQL(String sql) {
 		try {
-			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
+			
 			ResulSetTableModel modeloDatos = null;
 			try {
 				modeloDatos = new ResulSetTableModel(controlador, url, sql);
