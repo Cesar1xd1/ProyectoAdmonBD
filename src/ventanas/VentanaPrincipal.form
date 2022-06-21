@@ -24,6 +24,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Administradores"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jMenuAdministradoresMouseClicked"/>
+          </Events>
         </Menu>
       </SubComponents>
     </Menu>

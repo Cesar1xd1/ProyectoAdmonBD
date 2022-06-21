@@ -114,7 +114,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         jLfiltroConsulta = new javax.swing.JLabel();
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
 
         jLabel1.setText("Numero de Departamento");
@@ -157,7 +157,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         });
 
         btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Salir");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);

@@ -55,7 +55,6 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                         int i = (int)tabla.getValueAt(tabla.getSelectedRow(), 0);
                         tnoEmpleado.setText(i+"");
 			Date fn =  (Date) tabla.getValueAt(tabla.getSelectedRow(), 1);
-                        System.out.println(fn);
                         String sfn = fn+"";
 			String[] na = sfn.split("-");
                         cbDiaN.setSelectedItem(na[2]);
@@ -186,7 +185,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         jLfiltroConsulta = new javax.swing.JLabel();
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
 
         grupoB.add(toggBAltas);
