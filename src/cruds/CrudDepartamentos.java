@@ -2,19 +2,19 @@
 package cruds;
 import conexionBD.Conexion;
 import java.sql.Connection;
+import modelo.Departamento;
 import modelo.Empleado;
 
-public class CrudEmpleado {
-    Conexion con = new Conexion();
 
+public class CrudDepartamentos {
+    Conexion con = new Conexion();
     
-    
-public boolean insert(Empleado em){
+ public boolean insert(Departamento dep){
    boolean resultado = false;
     try{
    Connection conexion = con.connectDatabase();
    java.sql.Statement st = conexion.createStatement();
-   String sql = "INSERT INTO employees (emp_no,birth_date,first_name,last_name,gender,hire_date) VALUES ('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";
+   String sql = "INSERT INTO departments (dept_no,dept_name) VALUES ('"+dep.getNoDepartamento()+"','"+dep.getNombreDepartamento()+"');";
    st.execute(sql);
    st.close();
    resultado = true;
@@ -22,13 +22,13 @@ public boolean insert(Empleado em){
    }catch (Exception e){ 
    }
    return resultado;
-}//insert    
-public boolean delete(String ne){
+}//insert 
+ public boolean delete(String de){
    boolean resultado = false;
     try{
    Connection conexion = con.connectDatabase();
    java.sql.Statement st = conexion.createStatement();
-   String sql = "DELETE FROM employees WHERE emp_no = '"+ne+"';";
+   String sql = "DELETE FROM departments WHERE dept_no = '"+de+"';";
    st.execute(sql);
    st.close();
    resultado = true;
@@ -37,13 +37,12 @@ public boolean delete(String ne){
    }
    return resultado;
 }//delete
-
-public boolean modificar(Empleado em){
+ public boolean modificar(Departamento dep){
    boolean resultado = false;
     try{
    Connection conexion = con.connectDatabase();
    java.sql.Statement st = conexion.createStatement();
-   String sql = "UPDATE employees SET birth_date='"+em.getFechaNacimiento()+"', first_name='"+em.getNombre()+"', last_name='"+em.getApellido()+"'"+", gender='"+em.getGenero()+"', hire_date='"+em.getFechaContrato()+"' "+ " WHERE emp_no = '"+em.getNoEmpleado()+"';";    
+   String sql = "UPDATE employees SET dept_name= '"+dep.getNombreDepartamento()+ "' WHERE dept_no = '"+dep.getNoDepartamento()+"';";    
    st.execute(sql);
    st.close();
    resultado = true;
@@ -52,6 +51,11 @@ public boolean modificar(Empleado em){
    }
    return resultado;
 }//modificar
-
+    
+    
+    
+    
+    
+    
     
 }
