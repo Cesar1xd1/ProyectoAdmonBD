@@ -20,8 +20,8 @@ import modelo.Empleado;
  * @author cesar
  */
 public class VentanaEmpleados extends javax.swing.JFrame {
-    String controlador = "org.postgresql.Driver";
-    String url = "jdbc:postgresql://localhost:5432/employees";    
+    String controlador = new conexionBD.Conexion().getControlador();
+    String url = new conexionBD.Conexion().getUrl();
     public void atuaclizaTabla(JTable tabla) {
 		
         try {

@@ -15,6 +15,18 @@ import java.sql.*;
  */
 public class Conexion {
     Connection con = null;
+    String controlador = "org.postgresql.Driver";
+    String url = "jdbc:postgresql://localhost:5432/employees";
+    String usuario = "cesar1xd1";
+    String password = "1234";
+
+    public String getControlador() {
+        return controlador;
+    }
+
+    public String getUrl() {
+        return url;
+    }
     
     
     
@@ -24,7 +36,7 @@ public class Conexion {
             // We register the PostgreSQL driver
             // Registramos el driver de PostgresSQL
             try { 
-                Class.forName("org.postgresql.Driver");
+                Class.forName(controlador);
             } catch (ClassNotFoundException ex) {
                 System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
             }
@@ -32,8 +44,8 @@ public class Conexion {
             // Database connect
             // Conectamos con la base de datos
             con = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/employees",
-                    "cesar1xd1", "1234");
+                    url,
+                    usuario, password);
  
             boolean valid = con.isValid(50000);
             System.out.println(valid ? "TEST OK" : "TEST FAIL");

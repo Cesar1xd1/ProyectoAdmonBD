@@ -12,8 +12,8 @@ import modelo.Departamento;
 
 
 public class VentanaDepartamentos extends javax.swing.JFrame {
-   			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
+    String controlador = new conexionBD.Conexion().getControlador();
+    String url = new conexionBD.Conexion().getUrl();
     public void buscarPorCampo(){
         if(tnoDepartamento.getText().isEmpty() && !tNombre.getText().isEmpty()){
             atuaclizaTablaSQL("SELECT * FROM departments WHERE dept_name LIKE'"+tNombre.getText()+"%'");
