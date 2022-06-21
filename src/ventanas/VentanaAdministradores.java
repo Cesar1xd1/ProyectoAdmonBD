@@ -9,6 +9,7 @@ import cruds.CrudEmpleado;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Date;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -102,8 +103,44 @@ public class VentanaAdministradores extends javax.swing.JFrame {
         String a = (String) año.getSelectedItem();
         return a+"/"+m+"/"+d;
     }
+      public void buscarPorCampo(){
+        if(tnoDepartamento.getText().isEmpty() && !tnoEmpleado.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM dept_manager WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%'");
+        }else if(!tnoDepartamento.getText().isEmpty() && tnoEmpleado.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM dept_manager WHERE dept_no LIKE'"+tnoDepartamento.getText()+"%'");
+        }else if(tnoDepartamento.getText().isEmpty() && tnoEmpleado.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM dept_manager");
+        }else if(!tnoDepartamento.getText().isEmpty() && !tnoEmpleado.getText().isEmpty()){
+            atuaclizaTablaSQL("SELECT * FROM dept_manager WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND dept_no LIKE'"+tnoDepartamento.getText()+"%'");
+            }
+        }
+     public void obtenerRegistro() {
+		try {   
+                        int i = (int)tabla1.getValueAt(tabla1.getSelectedRow(), 0);
+                        tnoEmpleado.setText(i+"");
+                        tnoDepartamento.setText((String)tabla1.getValueAt(tabla1.getSelectedRow(),1));
+			Date ff =  (Date) tabla1.getValueAt(tabla1.getSelectedRow(), 2);
+                        String sff = ff+"";
+			String[] na = sff.split("-");
+                        cbDiaF.setSelectedItem(na[2]);
+                        cbMesF.setSelectedItem(na[1]);
+                        cbAñoF.setSelectedItem(na[0]);
+                        Date ft = (Date) tabla1.getValueAt(tabla1.getSelectedRow(), 3);
+			String sft = ft+"";
+                        String[] co = sft.split("-");
+                        cbDiaT.setSelectedItem(co[2]);
+                        cbMesT.setSelectedItem(co[1]);
+                        cbAñoT.setSelectedItem(co[0]);
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Producto no existe");
+			tnoEmpleado.setText("");
+                        tnoDepartamento.setText("");	
+		}
+	}
     public VentanaAdministradores() {
         initComponents();
+        jLfiltroConsulta.setVisible(false);
+        jComboBFiltroConsulta.setVisible(false);
         jScrollPane1.setVisible(false);
         jScrollPane2.setVisible(false);
         tnoEmpleado.addKeyListener(new KeyAdapter(){
@@ -114,6 +151,7 @@ public class VentanaAdministradores extends javax.swing.JFrame {
 				      }
 				   }
 				});
+        atuaclizaTabla(tabla1);
     }
 
     /**
@@ -217,11 +255,21 @@ public class VentanaAdministradores extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabla1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla1MouseClicked(evt);
+            }
+        });
         escroll.setViewportView(tabla1);
 
         tnoEmpleado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tnoEmpleadoActionPerformed(evt);
+            }
+        });
+        tnoEmpleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tnoEmpleadoKeyReleased(evt);
             }
         });
 
@@ -243,6 +291,11 @@ public class VentanaAdministradores extends javax.swing.JFrame {
         tnoDepartamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tnoDepartamentoActionPerformed(evt);
+            }
+        });
+        tnoDepartamento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tnoDepartamentoKeyReleased(evt);
             }
         });
 
@@ -523,7 +576,16 @@ public class VentanaAdministradores extends javax.swing.JFrame {
      }
        atuaclizaTabla(tabla1);
         }else if(toggBBajas.isSelected()){
-        
+            String i = (tnoEmpleado.getText());
+            CrudAdministrador ca = new CrudAdministrador();
+            if(ca.delete(i)){
+            
+        }else{
+            JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
+        }
+            atuaclizaTablaSQL("SELECT * FROM dept_manager");
+        tnoEmpleado.setText("");
+        tnoDepartamento.setText("");
         }else if(toggBCambios.isSelected()){
         
         }else if(toggBConsultas.isSelected()){
@@ -547,7 +609,7 @@ public class VentanaAdministradores extends javax.swing.JFrame {
     }//GEN-LAST:event_tnoEmpleadoActionPerformed
 
     private void tnoDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tnoDepartamentoActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_tnoDepartamentoActionPerformed
 
     private void toggBConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBConsultasActionPerformed
@@ -667,6 +729,24 @@ public class VentanaAdministradores extends javax.swing.JFrame {
             cbAñoT.setEnabled(false);
         }
     }//GEN-LAST:event_jComboBFiltroConsultaActionPerformed
+
+    private void tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla1MouseClicked
+        if(toggBBajas.isSelected()||toggBCambios.isSelected()){
+            obtenerRegistro();
+        }
+    }//GEN-LAST:event_tabla1MouseClicked
+
+    private void tnoEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoEmpleadoKeyReleased
+       if(toggBBajas.isSelected()||toggBCambios.isSelected()){
+            buscarPorCampo();
+        }
+    }//GEN-LAST:event_tnoEmpleadoKeyReleased
+
+    private void tnoDepartamentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoDepartamentoKeyReleased
+       if(toggBBajas.isSelected()){
+            buscarPorCampo();
+        }
+    }//GEN-LAST:event_tnoDepartamentoKeyReleased
 
     /**
      * @param args the command line arguments
