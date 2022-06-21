@@ -44,6 +44,12 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         String a = (String) año.getSelectedItem();
         return a+"/"+m+"/"+d;
     }
+      public String laFechaG(JComboBox dia,JComboBox mes,JComboBox año){
+        String d = (String) dia.getSelectedItem();
+        String m = (String) mes.getSelectedItem();
+        String a = (String) año.getSelectedItem();
+        return a+"-"+m+"-"+d;
+    }
     public void obtenerRegistro() {
             try {   
                         int i = (int)tabla.getValueAt(tabla.getSelectedRow(), 0);
@@ -111,6 +117,13 @@ public class VentanaEmpleados extends javax.swing.JFrame {
             atuaclizaTablaSQL("SELECT * FROM employees WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND first_name LIKE'"+tNombre.getText()+"%'");
         }
     }  
+     public void contadorR(){
+        if(tabla.getRowCount()==0){
+               JOptionPane.showMessageDialog(null,"No se encontraron registros");
+               atuaclizaTablaSQL("SELECT * FROM employees");
+           }
+        
+    }
     
     public VentanaEmpleados() {
         initComponents();
@@ -308,8 +321,13 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
         jLfiltroConsulta.setText("Filtro de Consulta: ");
 
-        jComboBFiltroConsulta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. Empleado", "Fecha de Nacimiento", "Nombre ", "Apellido", "Genero", "Fecha de Contratacion" }));
+        jComboBFiltroConsulta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. Empleado", "Fecha de Nacimiento", "Nombre ", "Apellido", "Genero", "Fecha de Contratacion", "Campos de Texto" }));
         jComboBFiltroConsulta.setToolTipText("");
+        jComboBFiltroConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBFiltroConsultaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -546,8 +564,18 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
     private void toggBConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBConsultasActionPerformed
        btnAccion.setText("Buscar");
-          btnAccion.setBackground(Color.BLUE);
-          jLfiltroConsulta.setVisible(true);
+        btnAccion.setBackground(Color.BLUE);
+        tnoEmpleado.setEnabled(true);
+        tNombre.setEnabled(false);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(false);
+         jLfiltroConsulta.setVisible(true);
         jComboBFiltroConsulta.setVisible(true);
           limpiarCajas();
     }//GEN-LAST:event_toggBConsultasActionPerformed
@@ -623,13 +651,65 @@ public class VentanaEmpleados extends javax.swing.JFrame {
             }
         }else if(toggBConsultas.isSelected()){
             
+            String sql = "SELECT * FROM employees ";
+       if(jComboBFiltroConsulta.getSelectedIndex()==0){
+           if(tnoEmpleado.getText().equals("")){
+               JOptionPane.showMessageDialog(null,"Inmgresa un numero de empleado a buscar");
+           }else{
+               sql = sql + "WHERE emp_no ::TEXT LIKE'"+tnoEmpleado.getText()+"%'";
+               atuaclizaTablaSQL(sql);
+               
+           }
+           contadorR();
+       }else if(jComboBFiltroConsulta.getSelectedIndex()==1){
+           sql = sql + "WHERE birth_date::TEXT LIKE'"+laFechaG(cbDiaN, cbMesN, cbAñoN)+"%'";
+           atuaclizaTablaSQL(sql);
+           contadorR();
+       }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
+           
+           if(tNombre.getText().equals("")){
+                JOptionPane.showMessageDialog(null,"Inmgresa un Nombre a buscar");
+           }else{
+               sql = sql + "WHERE first_name LIKE'"+tNombre.getText()+"%'";
+               atuaclizaTablaSQL(sql);
+           }
+           contadorR();
+       }else if(jComboBFiltroConsulta.getSelectedIndex()==3){
+          
+           if(tApellido.getText().equals("")){
+                JOptionPane.showMessageDialog(null,"Inmgresa un Apellido a buscar");
+            }else{
+               sql = sql + "WHERE last_name LIKE'"+tApellido.getText()+"%'";
+               atuaclizaTablaSQL(sql);
+           }
+           contadorR();
+       }else if(jComboBFiltroConsulta.getSelectedIndex()==4){
+           
+           String x = "";
+           if(cbGenero.getSelectedIndex()==0){
+               x="M";
+           }else{
+               x="F";
+           }
+           sql = sql + "WHERE gender::TEXT LIKE'"+x+"%'";
+           atuaclizaTablaSQL(sql);
+           contadorR();
+       }else if(jComboBFiltroConsulta.getSelectedIndex()==5){
+           sql = sql + "WHERE hire_date::TEXT LIKE'"+laFechaG(cbDiaC, cbMesC, cbAñoC)+"%'";
+           atuaclizaTablaSQL(sql);
+           contadorR();
+       }else if(jComboBFiltroConsulta.getSelectedIndex()==6){
+           sql = sql + "WHERE emp_no ::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND first_name LIKE'"+tNombre.getText()+"%' AND last_name LIKE'"+tApellido.getText()+"%'";
+           atuaclizaTablaSQL(sql);
+           contadorR();
+       }
         }else{
             JOptionPane.showMessageDialog(getContentPane(), "Ninguna opcion seleccionada");
         }
     }//GEN-LAST:event_btnAccionActionPerformed
 
     private void tnoEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoEmpleadoKeyReleased
-        if(toggBBajas.isSelected()){
+        if(toggBBajas.isSelected()||toggBCambios.isSelected()){
             buscarPorCampos();
         }
     }//GEN-LAST:event_tnoEmpleadoKeyReleased
@@ -645,6 +725,88 @@ public class VentanaEmpleados extends javax.swing.JFrame {
             obtenerRegistro();
         }
     }//GEN-LAST:event_tablaMouseClicked
+
+    private void jComboBFiltroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBFiltroConsultaActionPerformed
+        limpiarCajas();
+        if(jComboBFiltroConsulta.getSelectedIndex()==0){
+        tnoEmpleado.setEnabled(true);
+        tNombre.setEnabled(false);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(false);
+        }else if(jComboBFiltroConsulta.getSelectedIndex()==1){
+        tnoEmpleado.setEnabled(false);
+        tNombre.setEnabled(false);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(true);
+        cbMesN.setEnabled(true);
+        cbAñoN.setEnabled(true);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(false);
+        }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
+        tnoEmpleado.setEnabled(false);
+        tNombre.setEnabled(true);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(false);
+        }else if(jComboBFiltroConsulta.getSelectedIndex()==3){
+        tnoEmpleado.setEnabled(false);
+        tNombre.setEnabled(false);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(true);
+        }else if(jComboBFiltroConsulta.getSelectedIndex()==4){
+        tnoEmpleado.setEnabled(false);
+        tNombre.setEnabled(false);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(true);
+        tApellido.setEnabled(false);
+        }else if(jComboBFiltroConsulta.getSelectedIndex()==5){
+        tnoEmpleado.setEnabled(false);
+        tNombre.setEnabled(false);
+        cbDiaC.setEnabled(true);
+        cbMesC.setEnabled(true);
+        cbAñoC.setEnabled(true);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(false);
+        }else if(jComboBFiltroConsulta.getSelectedIndex()==6){
+        tnoEmpleado.setEnabled(true);
+        tNombre.setEnabled(true);
+        cbDiaC.setEnabled(false);
+        cbMesC.setEnabled(false);
+        cbAñoC.setEnabled(false);
+        cbDiaN.setEnabled(false);
+        cbMesN.setEnabled(false);
+        cbAñoN.setEnabled(false);
+        cbGenero.setEnabled(false);
+        tApellido.setEnabled(true);
+        }
+    }//GEN-LAST:event_jComboBFiltroConsultaActionPerformed
 
 
     public static void main(String args[]) {
