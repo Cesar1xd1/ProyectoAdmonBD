@@ -37,6 +37,21 @@ public boolean delete(String ne){
    }
    return resultado;
 }//insert 
-    
+
+public boolean modificar(Empleado em){
+   boolean resultado = false;
+    try{
+   Connection conexion = con.connectDatabase();
+   java.sql.Statement st = conexion.createStatement();
+   String sql = "UPDATE employees SET birth_date='"+em.getFechaNacimiento()+"', first_name='"+em.getNombre()+"', last_name='"+em.getApellido()+"'"+", gender='"+em.getGenero()+"', hire_date='"+em.getFechaContrato()+"' "+ " WHERE emp_no = '"+em.getNoEmpleado()+"';";    
+   st.execute(sql);
+   st.close();
+   resultado = true;
+   conexion.close();
+   }catch (Exception e){ 
+   }
+   return resultado;
+}//
+
     
 }

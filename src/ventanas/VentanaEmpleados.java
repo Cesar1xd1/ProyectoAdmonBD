@@ -114,6 +114,8 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     
     public VentanaEmpleados() {
         initComponents();
+        jLfiltroConsulta.setVisible(false);
+        jComboBFiltroConsulta.setVisible(false);
         
         tnoEmpleado.addKeyListener(new KeyAdapter(){
 			   public void keyTyped(KeyEvent e){
@@ -168,6 +170,8 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLfiltroConsulta = new javax.swing.JLabel();
+        jComboBFiltroConsulta = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -302,6 +306,11 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         jLabel7.setText("EMPLEADOS");
 
+        jLfiltroConsulta.setText("Filtro de Consulta: ");
+
+        jComboBFiltroConsulta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. Empleado", "Fecha de Nacimiento", "Nombre ", "Apellido", "Genero", "Fecha de Contratacion" }));
+        jComboBFiltroConsulta.setToolTipText("");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -328,7 +337,11 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLfiltroConsulta)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBFiltroConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(96, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -404,7 +417,10 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                         .addComponent(toggBConsultas))
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
-                .addComponent(jLabel7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLfiltroConsulta)
+                    .addComponent(jComboBFiltroConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addComponent(btnAccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -478,6 +494,8 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         cbAñoN.setEnabled(false);
         cbGenero.setEnabled(false);
         tApellido.setEnabled(false);
+        jLfiltroConsulta.setVisible(false);
+        jComboBFiltroConsulta.setVisible(false);
         limpiarCajas();
     }//GEN-LAST:event_toggBBajasActionPerformed
 
@@ -494,6 +512,8 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         cbAñoN.setEnabled(true);
         cbGenero.setEnabled(true);
         tApellido.setEnabled(true);
+        jLfiltroConsulta.setVisible(false);
+        jComboBFiltroConsulta.setVisible(false);
         limpiarCajas();
          
     }//GEN-LAST:event_toggBAltasActionPerformed
@@ -509,18 +529,32 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     private void toggBCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBCambiosActionPerformed
         btnAccion.setText("Guardar");
         btnAccion.setBackground(Color.MAGENTA);
+        tnoEmpleado.setEnabled(true);
+        tNombre.setEnabled(true);
+        cbDiaC.setEnabled(true);
+        cbMesC.setEnabled(true);
+        cbAñoC.setEnabled(true);
+        cbDiaN.setEnabled(true);
+        cbMesN.setEnabled(true);
+        cbAñoN.setEnabled(true);
+        cbGenero.setEnabled(true);
+        tApellido.setEnabled(true);
+        jLfiltroConsulta.setVisible(false);
+        jComboBFiltroConsulta.setVisible(false);
         limpiarCajas();
     }//GEN-LAST:event_toggBCambiosActionPerformed
 
     private void toggBConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBConsultasActionPerformed
        btnAccion.setText("Buscar");
           btnAccion.setBackground(Color.BLUE);
+          jLfiltroConsulta.setVisible(true);
+        jComboBFiltroConsulta.setVisible(true);
           limpiarCajas();
     }//GEN-LAST:event_toggBConsultasActionPerformed
 
     private void btnAccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccionActionPerformed
         if(toggBAltas.isSelected()){
-            String noEm = tnoEmpleado.getText() ;
+        String noEm = tnoEmpleado.getText() ;
         String fNaci = laFecha(cbDiaN, cbMesN, cbAñoN);
         String nombre = tNombre.getText();
         String apellido = tApellido.getText();
@@ -548,9 +582,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                
             }
         }else if(toggBBajas.isSelected()){
-            
-        
-            String i = (tnoEmpleado.getText());
+        String i = (tnoEmpleado.getText());
         CrudEmpleado ce = new CrudEmpleado();
         if(ce.delete(i)){
             
@@ -562,7 +594,33 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         tNombre.setText("");
         tApellido.setText("");
         }else if(toggBCambios.isSelected()){
-            
+            String noEm = tnoEmpleado.getText() ;
+        String fNaci = laFecha(cbDiaN, cbMesN, cbAñoN);
+        String nombre = tNombre.getText();
+        String apellido = tApellido.getText();
+        String genero = (String)cbGenero.getSelectedItem() ;
+        if(genero.equals("Masculino")){
+            genero = "M";
+        }else{
+            genero = "F";
+        }
+        String fContrato = laFecha(cbDiaC, cbMesC, cbAñoC);
+        
+        if(noEm.equals("")||fNaci.equals("")||nombre.equals("")||apellido.equals("")||fContrato.equals("")){
+            JOptionPane.showMessageDialog(null, "Algun campo quedo sin ser llenado");
+        }else{
+            int neI = Integer.parseInt(noEm);
+            Empleado emp = new Empleado(neI, fNaci,nombre,apellido,genero,fContrato);
+            CrudEmpleado ce = new CrudEmpleado();
+            if(ce.modificar(emp)){
+                
+            }else{
+                    JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");    
+                        }
+             atuaclizaTabla(tabla);
+               
+               
+            }
         }else if(toggBConsultas.isSelected()){
             
         }else{
@@ -583,7 +641,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     }//GEN-LAST:event_tNombreKeyReleased
 
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
-         if(toggBBajas.isSelected()){
+         if(toggBBajas.isSelected()||toggBCambios.isSelected()){
             obtenerRegistro();
         }
     }//GEN-LAST:event_tablaMouseClicked
@@ -612,6 +670,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     private javax.swing.JScrollPane escroll;
     private javax.swing.ButtonGroup grupoB;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBFiltroConsulta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -626,6 +685,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLfiltroConsulta;
     private javax.swing.JTextField tApellido;
     private javax.swing.JTextField tNombre;
     private javax.swing.JTable tabla;

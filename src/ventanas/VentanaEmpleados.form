@@ -52,7 +52,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Component id="jLabel7" min="-2" pref="247" max="-2" attributes="0"/>
+                      <Component id="jLabel7" min="-2" pref="149" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jLfiltroConsulta" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jComboBFiltroConsulta" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="96" max="32767" attributes="0"/>
@@ -152,7 +156,11 @@
                   <Component id="jButton1" alignment="0" min="-2" pref="33" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLfiltroConsulta" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jComboBFiltroConsulta" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="btnAccion" min="-2" pref="30" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -848,6 +856,29 @@
         </Property>
         <Property name="text" type="java.lang.String" value="EMPLEADOS"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLfiltroConsulta">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Filtro de Consulta: "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="jComboBFiltroConsulta">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="6">
+            <StringItem index="0" value="No. Empleado"/>
+            <StringItem index="1" value="Fecha de Nacimiento"/>
+            <StringItem index="2" value="Nombre "/>
+            <StringItem index="3" value="Apellido"/>
+            <StringItem index="4" value="Genero"/>
+            <StringItem index="5" value="Fecha de Contratacion"/>
+          </StringArray>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
