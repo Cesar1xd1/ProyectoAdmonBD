@@ -15,6 +15,9 @@ import java.sql.*;
  */
 public class Conexion {
     Connection con = null;
+    //String url = "jdbc:postgresql://bfmuoby0ve9qbx6g9mhs-postgresql.services.clever-cloud.com:5432/bfmuoby0ve9qbx6g9mhs";
+    //String usuario = "uxnsqttro2jnolgfja56";
+    //String password = "7UdeZKa7KkB2zzsqxP9E";
     String controlador = "org.postgresql.Driver";
     String url = "jdbc:postgresql://localhost:5432/employees";
     String usuario = "cesar1xd1";
@@ -27,10 +30,16 @@ public class Conexion {
     public String getUrl() {
         return url;
     }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
     
-    
-    
-    
+
     public Connection connectDatabase() {
         try {
             // We register the PostgreSQL driver
@@ -52,6 +61,7 @@ public class Conexion {
         } catch (java.sql.SQLException sqle) {
             System.out.println("Error: " + sqle);
         }
+        
         return con;
     } 
    
@@ -62,5 +72,6 @@ public class Conexion {
     public static void main(String[] args) {
         Conexion javaPostgreSQLBasic = new Conexion();
         javaPostgreSQLBasic.connectDatabase(); 
+        new ventanas.Login().setVisible(true);
     }
 }

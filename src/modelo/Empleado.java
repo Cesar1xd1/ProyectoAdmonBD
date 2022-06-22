@@ -10,6 +10,9 @@ public class Empleado {
         private String genero;
         private String fechaContrato;
 
+    public Empleado() {
+    }
+    
     public Empleado(int noEmpleado, String fechaNacimiento, String nombre, String apellido, String genero, String fechaContrato) {
         this.noEmpleado = noEmpleado;
         this.fechaNacimiento = fechaNacimiento;

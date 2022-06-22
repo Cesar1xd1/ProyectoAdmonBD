@@ -17,6 +17,8 @@ public class ResulSetTableModel extends AbstractTableModel {
    private ResultSet conjuntoResultados;
    private ResultSetMetaData metaDatos;
    private int numeroDeFilas;
+   String usuario = new conexionBD.Conexion().getUsuario();
+    String password = new conexionBD.Conexion().getPassword();
 
    // mantener el registro del estado de la conexi�n a la base de datos
    private boolean conectadoALaBaseDeDatos = false;
@@ -29,7 +31,7 @@ public class ResulSetTableModel extends AbstractTableModel {
       Class.forName( controlador );
 
       // conectarse a la base de datos
-      conexion = DriverManager.getConnection( url,"cesar1xd1","1234" );
+      conexion = DriverManager.getConnection( url,usuario,password );
 
       // crear objeto Statement para consultar la base de datos
       instruccion = conexion.createStatement(

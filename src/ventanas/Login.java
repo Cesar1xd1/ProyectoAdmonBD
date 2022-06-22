@@ -10,10 +10,11 @@ import javax.swing.*;
 
 public class Login extends javax.swing.JFrame {
     JTable tabla = new JTable();
+    String controlador = new conexionBD.Conexion().getControlador();
+    String url = new conexionBD.Conexion().getUrl();
     public void atuaclizaTabla(String sql) {
 		try {
-			String controlador = "org.postgresql.Driver";
-			String url = "jdbc:postgresql://localhost:5432/employees";
+			
 			
 			ResulSetTableModel modeloDatos = null;
 			try {
