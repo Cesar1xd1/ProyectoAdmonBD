@@ -223,6 +223,11 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         jLabel10.setText("Apellido");
 
         jButton1.setText("Contar Generos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("Genero");
 
@@ -810,6 +815,10 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         tApellido.setEnabled(true);
         }
     }//GEN-LAST:event_jComboBFiltroConsultaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new VerGeneros().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     public static void main(String args[]) {
