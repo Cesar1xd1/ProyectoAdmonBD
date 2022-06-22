@@ -103,6 +103,12 @@ public class VentanaAdministradores extends javax.swing.JFrame {
         String a = (String) año.getSelectedItem();
         return a+"/"+m+"/"+d;
     }
+     public String laFechaG(JComboBox dia,JComboBox mes,JComboBox año){
+        String d = (String) dia.getSelectedItem();
+        String m = (String) mes.getSelectedItem();
+        String a = (String) año.getSelectedItem();
+        return a+"-"+m+"-"+d;
+    }
       public void buscarPorCampo(){
         if(tnoDepartamento.getText().isEmpty() && !tnoEmpleado.getText().isEmpty()){
             atuaclizaTablaSQL("SELECT * FROM dept_manager WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%'");
@@ -114,6 +120,12 @@ public class VentanaAdministradores extends javax.swing.JFrame {
             atuaclizaTablaSQL("SELECT * FROM dept_manager WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND dept_no LIKE'"+tnoDepartamento.getText()+"%'");
             }
         }
+      public void contadorR(){
+        if(tabla1.getRowCount()==0){
+               JOptionPane.showMessageDialog(null,"No se encontraron registros");
+               atuaclizaTablaSQL("SELECT * FROM dept_manager");
+           }
+    }
      public void obtenerRegistro() {
 		try {   
                         int i = (int)tabla1.getValueAt(tabla1.getSelectedRow(), 0);
@@ -613,7 +625,35 @@ public class VentanaAdministradores extends javax.swing.JFrame {
         }
         atuaclizaTabla(tabla1);
         }else if(toggBConsultas.isSelected()){
-     
+            String sql = "SELECT * FROM dept_manager ";
+            if(jComboBFiltroConsulta.getSelectedIndex()==0){
+                if(tnoEmpleado.getText().equals("")){
+               JOptionPane.showMessageDialog(null,"Inmgresa un numero de empleado a buscar");
+           }else{
+               sql = sql + "WHERE emp_no ::TEXT LIKE'"+tnoEmpleado.getText()+"%'";
+               atuaclizaTablaSQL(sql);
+               
+           }
+           contadorR();
+            }else if(jComboBFiltroConsulta.getSelectedIndex()==1){
+                if(tnoDepartamento.getText().equals("")){
+                JOptionPane.showMessageDialog(null,"Inmgresa un numero de departamento a buscar");
+            }else{
+                sql = sql + "WHERE dept_no LIKE'"+tnoDepartamento.getText()+"%'";
+                atuaclizaTablaSQL(sql);
+            }
+            contadorR();
+            }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
+                sql = sql + "WHERE from_date::TEXT LIKE'"+laFechaG(cbDiaF, cbMesF, cbAñoF)+"%'";
+                atuaclizaTablaSQL(sql);
+                contadorR();
+            }else if (jComboBFiltroConsulta.getSelectedIndex()==3){
+                sql = sql + "WHERE to_date::TEXT LIKE'"+laFechaG(cbDiaT, cbMesT, cbAñoT)+"%'";
+                atuaclizaTablaSQL(sql);
+                contadorR();
+            }else if(jComboBFiltroConsulta.getSelectedIndex()==4){
+                sql = sql + "WHERE emp_no::TEXT LIKE '"+tnoEmpleado.getText()+"%' AND dept_no LIKE '"+tnoDepartamento.getText()+"%'";
+            }
         }else{
             JOptionPane.showMessageDialog(getContentPane(), "Ninguna opcion seleccionada");
         }
@@ -621,6 +661,7 @@ public class VentanaAdministradores extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         limpiarCajas();
+        atuaclizaTablaSQL("SELECT * FROM dept_manager");
 
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
