@@ -18,7 +18,7 @@ public class ResulSetTableModel extends AbstractTableModel {
    private ResultSetMetaData metaDatos;
    private int numeroDeFilas;
    String usuario = new conexionBD.Conexion().getUsuario();
-    String password = new conexionBD.Conexion().getPassword();
+   String password = new conexionBD.Conexion().getPassword();
 
    // mantener el registro del estado de la conexi�n a la base de datos
    private boolean conectadoALaBaseDeDatos = false;

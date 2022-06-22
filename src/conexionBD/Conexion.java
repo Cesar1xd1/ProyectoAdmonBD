@@ -22,7 +22,7 @@ public class Conexion {
     String url = "jdbc:postgresql://localhost:5432/employees";
     String usuario = "cesar1xd1";
     String password = "1234";
-
+    
     public String getControlador() {
         return controlador;
     }
@@ -58,6 +58,7 @@ public class Conexion {
  
             boolean valid = con.isValid(50000);
             System.out.println(valid ? "TEST OK" : "TEST FAIL");
+            
         } catch (java.sql.SQLException sqle) {
             System.out.println("Error: " + sqle);
         }
