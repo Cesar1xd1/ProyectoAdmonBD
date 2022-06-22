@@ -586,8 +586,32 @@ public class VentanaAdministradores extends javax.swing.JFrame {
             atuaclizaTablaSQL("SELECT * FROM dept_manager");
         tnoEmpleado.setText("");
         tnoDepartamento.setText("");
-        }else if(toggBCambios.isSelected()){
-        
+        }else if(toggBCambios.isSelected()){//CAMBIO
+            String noEm = tnoEmpleado.getText();
+        String noDp = tnoDepartamento.getText();
+        String fFrom = laFecha(cbDiaF, cbMesF, cbAñoF);
+        String fTo = laFecha(cbDiaT, cbMesT, cbAñoT);
+        if(noEm.equals("")||noDp.equals("")){
+            JOptionPane.showMessageDialog(null, "Algun campo quedo sin ser llenado");
+        }else{
+            if(noDp.length()>4){
+                JOptionPane.showMessageDialog(null, "El numero de departamento debe ser de maximo 4 digitos ");
+            }else{
+                if(buscar()){
+                    int neI = Integer.parseInt(noEm);
+                    Administrador ad = new Administrador(neI, noDp,fFrom,fTo);
+                    CrudAdministrador ca = new CrudAdministrador();
+                    if(ca.modificar(ad)){
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
+                    }
+
+                }
+
+            }
+
+        }
+        atuaclizaTabla(tabla1);
         }else if(toggBConsultas.isSelected()){
      
         }else{
