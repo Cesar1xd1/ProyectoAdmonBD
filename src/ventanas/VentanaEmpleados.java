@@ -126,6 +126,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
     
     public VentanaEmpleados() {
         initComponents();
+        
         jLfiltroConsulta.setVisible(false);
         jComboBFiltroConsulta.setVisible(false);
         

@@ -4,6 +4,13 @@
  */
 package ventanas;
 
+import conexionBD.Conexion;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
 /**
  *
  * @author cesar
@@ -31,6 +38,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenuEmpleados = new javax.swing.JMenu();
         jMenuDepartamentos = new javax.swing.JMenu();
         jMenuAdministradores = new javax.swing.JMenu();
+        jMenuReporte = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -72,6 +80,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         jMenuBar1.add(jMenuAdministradores);
 
+        jMenuReporte.setText("Reporte");
+        jMenuReporte.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuReporteMouseClicked(evt);
+            }
+        });
+        jMenuReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuReporteActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(jMenuReporte);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -99,6 +120,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void jMenuAdministradoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAdministradoresMouseClicked
         new VentanaAdministradores().setVisible(true);
     }//GEN-LAST:event_jMenuAdministradoresMouseClicked
+
+    private void jMenuReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuReporteActionPerformed
+        
+    }//GEN-LAST:event_jMenuReporteActionPerformed
+
+    private void jMenuReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuReporteMouseClicked
+        Conexion con = new Conexion();
+        try {
+            String ruta=System.getProperty("user.dir")+"/src/r/report1.jasper";
+            JasperReport jaspe=(JasperReport) JRLoader.loadObjectFromFile(ruta);
+            JasperPrint print=JasperFillManager.fillReport(jaspe,null,con.connectDatabase());
+            JasperViewer view= new JasperViewer(print,false);
+            view.setVisible(true);
+        } catch (Exception e) {
+            System.err.println("Error al generar el reporte---->"+e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuReporteMouseClicked
 
     /**
      * @param args the command line arguments
@@ -140,6 +178,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDepartamentos;
     private javax.swing.JMenu jMenuEmpleados;
+    private javax.swing.JMenu jMenuReporte;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
