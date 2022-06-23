@@ -22,6 +22,7 @@ import modelo.Empleado;
 public class VentanaEmpleados extends javax.swing.JFrame {
     String controlador = new conexionBD.Conexion().getControlador();
     String url = new conexionBD.Conexion().getUrl();
+   
     
     public void atuaclizaTabla(JTable tabla) {
 		
@@ -188,6 +189,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 255, 153));
         setResizable(false);
 
         grupoB.add(toggBAltas);

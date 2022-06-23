@@ -4,6 +4,7 @@ package conexionBD;
 
 package org.xulescode.database;
  
+import cruds.CrudEmpleado;
 import java.sql.*;
  
 /**
@@ -23,10 +24,12 @@ public class Conexion {
     String usuario = "cesar1xd1";
     String password = "1234";
     
+    
     public String getControlador() {
         return controlador;
     }
-
+    
+     
     public String getUrl() {
         return url;
     }
