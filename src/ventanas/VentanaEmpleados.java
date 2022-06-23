@@ -22,6 +22,7 @@ import modelo.Empleado;
 public class VentanaEmpleados extends javax.swing.JFrame {
     String controlador = new conexionBD.Conexion().getControlador();
     String url = new conexionBD.Conexion().getUrl();
+    
     public void atuaclizaTabla(JTable tabla) {
 		
         try {
