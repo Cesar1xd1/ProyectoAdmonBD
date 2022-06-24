@@ -4,12 +4,17 @@
  */
 package ventanas;
 
+import conexionBD.Conexion;
 import cruds.CrudAdministrador;
 import cruds.CrudEmpleado;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -21,8 +26,13 @@ import modelo.Empleado;
  * @author cesar
  */
 public class VentanaAdministradores extends javax.swing.JFrame {
-    String controlador = new conexionBD.Conexion().getControlador();
-    String url = new conexionBD.Conexion().getUrl();
+    Conexion c = Conexion.getC();
+    String controlador = c.getControlador();
+    String url = c.getUrl();
+    Connection con = c.getCon();
+    CrudAdministrador ca = new CrudAdministrador();
+    int commit = 0;
+    
     public void atuaclizaTabla(JTable tabla) {
 		try {
 			
@@ -150,6 +160,7 @@ public class VentanaAdministradores extends javax.swing.JFrame {
 		}
 	}
     public VentanaAdministradores() {
+        ca.beggin();
         initComponents();
         jLfiltroConsulta.setVisible(false);
         jComboBFiltroConsulta.setVisible(false);
@@ -575,8 +586,9 @@ public class VentanaAdministradores extends javax.swing.JFrame {
               if(x==true){
             int neI = Integer.parseInt(noEm);
             Administrador ad = new Administrador(neI, noDp,fFrom,fTo);
-            CrudAdministrador ca = new CrudAdministrador();
+            
             if(ca.insert(ad)){
+                commit = 1;
             }else{
                     JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");    
                         }
@@ -589,9 +601,9 @@ public class VentanaAdministradores extends javax.swing.JFrame {
        atuaclizaTabla(tabla1);
         }else if(toggBBajas.isSelected()){
             String i = (tnoEmpleado.getText());
-            CrudAdministrador ca = new CrudAdministrador();
-            if(ca.delete(i)){
             
+            if(ca.delete(i)){
+            commit = 1;
         }else{
             JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
         }
@@ -612,8 +624,9 @@ public class VentanaAdministradores extends javax.swing.JFrame {
                 if(buscar()){
                     int neI = Integer.parseInt(noEm);
                     Administrador ad = new Administrador(neI, noDp,fFrom,fTo);
-                    CrudAdministrador ca = new CrudAdministrador();
+                    
                     if(ca.modificar(ad)){
+                        commit = 1;
                     }else{
                         JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
                     }
@@ -667,6 +680,19 @@ public class VentanaAdministradores extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         setVisible(false);
+          if(commit == 1){
+              int resp = JOptionPane.showConfirmDialog(null, "¿Desea Guardar los cambios?");
+             if(resp==0){
+                 ca.commit();
+            setVisible(false);
+        }else if(resp==1){
+                 ca.rollback();
+            setVisible(false);
+        }else if(resp==2){
+        } 
+         }else{
+                 setVisible(false);
+             }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void tnoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tnoEmpleadoActionPerformed
@@ -800,6 +826,8 @@ public class VentanaAdministradores extends javax.swing.JFrame {
             obtenerRegistro();
         }
     }//GEN-LAST:event_tabla1MouseClicked
+
+  
 
     private void tnoEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoEmpleadoKeyReleased
        if(toggBBajas.isSelected()||toggBCambios.isSelected()){

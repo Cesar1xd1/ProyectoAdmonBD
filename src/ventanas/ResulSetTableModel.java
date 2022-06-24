@@ -1,5 +1,6 @@
 package ventanas;
 
+import conexionBD.Conexion;
 import java.sql.*;
 import java.util.*;
 import javax.swing.table.*;
@@ -12,13 +13,17 @@ import javax.swing.table.*;
 // es la columna 1 del objeto ResultSet y la fila 0 del objeto JTable es la fila 1 del objeto ResultSet).
 
 public class ResulSetTableModel extends AbstractTableModel {
+   
    private Connection conexion;
    private Statement instruccion;
    private ResultSet conjuntoResultados;
    private ResultSetMetaData metaDatos;
    private int numeroDeFilas;
-   String usuario = new conexionBD.Conexion().getUsuario();
-   String password = new conexionBD.Conexion().getPassword();
+   String usuario = Conexion.getUsuario();
+   String password = Conexion.getPassword();
+
+ 
+    
 
    // mantener el registro del estado de la conexi�n a la base de datos
    private boolean conectadoALaBaseDeDatos = false;
@@ -31,7 +36,7 @@ public class ResulSetTableModel extends AbstractTableModel {
       Class.forName( controlador );
 
       // conectarse a la base de datos
-      conexion = DriverManager.getConnection( url,usuario,password );
+      conexion = Conexion.getCon();
 
       // crear objeto Statement para consultar la base de datos
       instruccion = conexion.createStatement(
@@ -43,6 +48,8 @@ public class ResulSetTableModel extends AbstractTableModel {
 
       // establecer consulta y ejecutarla
       establecerConsulta( consulta );
+      //conexion.close();
+    
    }
 
    // obtener la clase que representa al tipo de columna

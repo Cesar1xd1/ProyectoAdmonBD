@@ -5,30 +5,39 @@
 package ventanas;
 
 
+import conexionBD.Conexion;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Login extends javax.swing.JFrame {
+    Conexion co = Conexion.getC();
     JTable tabla = new JTable();
-    String controlador = new conexionBD.Conexion().getControlador();
-    String url = new conexionBD.Conexion().getUrl();
+    String controlador = co.getControlador();
+    String url = co.getUrl();
+    ResulSetTableModel modeloDatos = null;
+    
     public void atuaclizaTabla(String sql) {
 		try {
 			
-			
-			ResulSetTableModel modeloDatos = null;
 			try {
 				modeloDatos = new ResulSetTableModel(controlador, url, sql);
 			}catch (ClassNotFoundException ex) {
 				JOptionPane.showMessageDialog(getContentPane(), ex);
 			}
 			tabla.setModel(modeloDatos);
+                        
 		}//Try
 		catch (Exception sqle) {
 			JOptionPane.showMessageDialog(getContentPane(), sqle);
 		}
+                
 	}
     public Login() {
+        
        initComponents();
         
     }
@@ -139,7 +148,9 @@ public class Login extends javax.swing.JFrame {
                 //Ventana principal
                 new VentanaPrincipal().setVisible(true);
                 setVisible(false);
-
+                
+                
+                
             }
 
         }
@@ -152,6 +163,7 @@ public class Login extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
+                
             }
         });
     }

@@ -4,12 +4,16 @@
  */
 package ventanas;
 
+import conexionBD.Conexion;
 import cruds.CrudEmpleado;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -20,18 +24,20 @@ import modelo.Empleado;
  * @author cesar
  */
 public class VentanaEmpleados extends javax.swing.JFrame {
-    String controlador = new conexionBD.Conexion().getControlador();
-    String url = new conexionBD.Conexion().getUrl();
-   
+    Conexion c = Conexion.getC();
+    String controlador = c.getControlador();
+    String url = c.getUrl();
+    Connection con = c.getCon();
+    CrudEmpleado ce = new CrudEmpleado();
+    ResulSetTableModel modeloDatos = null;
+    int commit = 0;
     
-    public void atuaclizaTabla(JTable tabla) {
-		
+    
+    public void atuaclizaTabla(JTable tabla,String consulta) {
         try {
-			
-			String Consulta = "SELECT * FROM employees";		
-			ResulSetTableModel modeloDatos = null;
+					
 			try {
-				modeloDatos = new ResulSetTableModel(controlador, url, Consulta);
+				modeloDatos = new ResulSetTableModel(controlador, url, consulta);
 			}catch (ClassNotFoundException ex) {
 				JOptionPane.showMessageDialog(getContentPane(), ex);
 			}
@@ -40,6 +46,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 		catch (Exception sqle) {
 			JOptionPane.showMessageDialog(getContentPane(), sqle);
 		}
+                
 	}
     public String laFecha(JComboBox dia,JComboBox mes,JComboBox año){
         String d = (String) dia.getSelectedItem();
@@ -89,44 +96,31 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         tNombre.setText("");
         tApellido.setText("");
     }
-    
-    
-    public void atuaclizaTablaSQL(String sql) {
-		try {
-			
-			
-			ResulSetTableModel modeloDatos = null;
-			try {
-				modeloDatos = new ResulSetTableModel(controlador, url, sql);
-			}catch (ClassNotFoundException ex) {
-				JOptionPane.showMessageDialog(getContentPane(), ex);
-			}
-			tabla.setModel(modeloDatos);
-		}//Try
-		catch (Exception sqle) {
-			JOptionPane.showMessageDialog(getContentPane(), sqle);
-		}
-	}
+ 
      public void buscarPorCampos(){
         if(tnoEmpleado.getText().isEmpty()&&!tNombre.getText().isEmpty()){
-            atuaclizaTablaSQL("SELECT * FROM employees WHERE first_name LIKE'"+tNombre.getText()+"%'");
+            atuaclizaTabla(tabla,"SELECT * FROM employees WHERE first_name LIKE'"+tNombre.getText()+"%'");
         }else if(!tnoEmpleado.getText().isEmpty()&&tNombre.getText().isEmpty()){
-            atuaclizaTablaSQL("SELECT * FROM employees WHERE emp_no::TEXT LIKE '"+tnoEmpleado.getText()+"%'");
+            atuaclizaTabla(tabla,"SELECT * FROM employees WHERE emp_no::TEXT LIKE '"+tnoEmpleado.getText()+"%'");
         }else if(tnoEmpleado.getText().isEmpty()&&tNombre.getText().isEmpty()){
-            atuaclizaTablaSQL("SELECT * FROM employees");
+            atuaclizaTabla(tabla,"SELECT * FROM employees");
         }else if(!tnoEmpleado.getText().isEmpty()&&!tNombre.getText().isEmpty()){
-            atuaclizaTablaSQL("SELECT * FROM employees WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND first_name LIKE'"+tNombre.getText()+"%'");
+            atuaclizaTabla(tabla,"SELECT * FROM employees WHERE emp_no::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND first_name LIKE'"+tNombre.getText()+"%'");
         }
+        
     }  
      public void contadorR(){
         if(tabla.getRowCount()==0){
                JOptionPane.showMessageDialog(null,"No se encontraron registros");
-               atuaclizaTablaSQL("SELECT * FROM employees");
+               atuaclizaTabla(tabla,"SELECT * FROM employees");
+               
+               
            }
         
     }
     
     public VentanaEmpleados() {
+        ce.beggin();
         initComponents();
         
         jLfiltroConsulta.setVisible(false);
@@ -140,8 +134,10 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 				      }
 				   }
 				});
-        
-               atuaclizaTabla(tabla);
+               
+               atuaclizaTabla(tabla,"SELECT * FROM Employees");
+               
+               
     
     }
 
@@ -547,12 +543,29 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
        limpiarCajas();
-       atuaclizaTablaSQL("SELECT * FROM employees");
+       atuaclizaTabla(tabla,"SELECT * FROM employees");
+       
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        setVisible(false);
+             if(commit == 1){
+              int resp = JOptionPane.showConfirmDialog(null, "¿Desea Guardar los cambios?");
+             if(resp==0){
+                 ce.commit();
+            setVisible(false);
+        }else if(resp==1){
+                 ce.rollback();
+            setVisible(false);
+        }else if(resp==2){
+        } 
+         }else{
+                 setVisible(false);
+             }
+        
+             
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    
 
     private void toggBCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBCambiosActionPerformed
         btnAccion.setText("Guardar");
@@ -610,25 +623,29 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         }else{
             int neI = Integer.parseInt(noEm);
             Empleado emp = new Empleado(neI, fNaci,nombre,apellido,genero,fContrato);
-            CrudEmpleado ce = new CrudEmpleado();
-            if(ce.insert(emp)){
-                
+            
+            if(ce.insert(emp)==true){
+                commit = 1;
             }else{
                     JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");    
                         }
-             atuaclizaTabla(tabla);
+            
+             atuaclizaTabla(tabla,"SELECT * FROM Employees");
+             
                
                
             }
         }else if(toggBBajas.isSelected()){
         String i = (tnoEmpleado.getText());
-        CrudEmpleado ce = new CrudEmpleado();
+        
         if(ce.delete(i)){
-            
+            commit = 1;
         }else{
             JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
         }
-        atuaclizaTablaSQL("SELECT * FROM employees");
+        atuaclizaTabla(tabla,"SELECT * FROM employees");
+        
+        
         tnoEmpleado.setText("");
         tNombre.setText("");
         tApellido.setText("");
@@ -650,13 +667,13 @@ public class VentanaEmpleados extends javax.swing.JFrame {
         }else{
             int neI = Integer.parseInt(noEm);
             Empleado emp = new Empleado(neI, fNaci,nombre,apellido,genero,fContrato);
-            CrudEmpleado ce = new CrudEmpleado();
             if(ce.modificar(emp)){
-                
+                commit = 1;
             }else{
                     JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");    
                         }
-             atuaclizaTabla(tabla);
+             atuaclizaTabla(tabla,"SELECT * FROM Employees");
+             
                
                
             }
@@ -668,13 +685,14 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                JOptionPane.showMessageDialog(null,"Inmgresa un numero de empleado a buscar");
            }else{
                sql = sql + "WHERE emp_no ::TEXT LIKE'"+tnoEmpleado.getText()+"%'";
-               atuaclizaTablaSQL(sql);
+               atuaclizaTabla(tabla,sql);
+               
                
            }
            contadorR();
        }else if(jComboBFiltroConsulta.getSelectedIndex()==1){
            sql = sql + "WHERE birth_date::TEXT LIKE'"+laFechaG(cbDiaN, cbMesN, cbAñoN)+"%'";
-           atuaclizaTablaSQL(sql);
+           atuaclizaTabla(tabla,sql);
            contadorR();
        }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
            
@@ -682,7 +700,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Ingresa un Nombre a buscar");
            }else{
                sql = sql + "WHERE first_name LIKE'"+tNombre.getText()+"%'";
-               atuaclizaTablaSQL(sql);
+               atuaclizaTabla(tabla,sql);
            }
            contadorR();
        }else if(jComboBFiltroConsulta.getSelectedIndex()==3){
@@ -691,7 +709,7 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Inmgresa un Apellido a buscar");
             }else{
                sql = sql + "WHERE last_name LIKE'"+tApellido.getText()+"%'";
-               atuaclizaTablaSQL(sql);
+               atuaclizaTabla(tabla,sql);
            }
            contadorR();
        }else if(jComboBFiltroConsulta.getSelectedIndex()==4){
@@ -703,20 +721,21 @@ public class VentanaEmpleados extends javax.swing.JFrame {
                x="F";
            }
            sql = sql + "WHERE gender::TEXT LIKE'"+x+"%'";
-           atuaclizaTablaSQL(sql);
+           atuaclizaTabla(tabla,sql);
            contadorR();
        }else if(jComboBFiltroConsulta.getSelectedIndex()==5){
            sql = sql + "WHERE hire_date::TEXT LIKE'"+laFechaG(cbDiaC, cbMesC, cbAñoC)+"%'";
-           atuaclizaTablaSQL(sql);
+           atuaclizaTabla(tabla,sql);
            contadorR();
        }else if(jComboBFiltroConsulta.getSelectedIndex()==6){
            sql = sql + "WHERE emp_no ::TEXT LIKE'"+tnoEmpleado.getText()+"%' AND first_name LIKE'"+tNombre.getText()+"%' AND last_name LIKE'"+tApellido.getText()+"%'";
-           atuaclizaTablaSQL(sql);
+           atuaclizaTabla(tabla,sql);
            contadorR();
        }
         }else{
             JOptionPane.showMessageDialog(getContentPane(), "Ninguna opcion seleccionada");
         }
+        
     }//GEN-LAST:event_btnAccionActionPerformed
 
     private void tnoEmpleadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tnoEmpleadoKeyReleased
@@ -739,7 +758,8 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 
     private void jComboBFiltroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBFiltroConsultaActionPerformed
         limpiarCajas();
-        atuaclizaTablaSQL("SELECT * FROM employees");
+        atuaclizaTabla(tabla,"SELECT * FROM employees");
+        
         if(jComboBFiltroConsulta.getSelectedIndex()==0){
         tnoEmpleado.setEnabled(true);
         tNombre.setEnabled(false);

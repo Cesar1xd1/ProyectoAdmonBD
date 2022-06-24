@@ -4,16 +4,25 @@
  */
 package ventanas;
 
+import conexionBD.Conexion;
 import cruds.CrudDepartamentos;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import modelo.Departamento;
 
 
 public class VentanaDepartamentos extends javax.swing.JFrame {
-    String controlador = new conexionBD.Conexion().getControlador();
-    String url = new conexionBD.Conexion().getUrl();
+    Conexion c = Conexion.getC();
+    String controlador = c.getControlador();
+    String url = c.getUrl();
+    Connection con = c.getCon();
+    CrudDepartamentos cd = new CrudDepartamentos();
+    int commit = 0;
     public void buscarPorCampo(){
         if(tnoDepartamento.getText().isEmpty() && !tNombre.getText().isEmpty()){
             atuaclizaTablaSQL("SELECT * FROM departments WHERE dept_name LIKE'"+tNombre.getText()+"%'");
@@ -82,7 +91,11 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         
         
     }
+
+    
+    
     public VentanaDepartamentos() {
+        cd.beggin();
         initComponents();
         atuaclizaTabla(tabla);
         jLfiltroConsulta.setVisible(false);
@@ -333,8 +346,9 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(null, "El numero de departamento debe ser de maximo 4 digitos ");
             }else{       
             Departamento depa = new Departamento(noDp,nombre);
-            CrudDepartamentos cd = new CrudDepartamentos();
+            
             if(cd.insert(depa)){
+                commit = 1;
             }else{
                 JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
             }}
@@ -342,9 +356,9 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         }
         }else if(toggBBajas.isSelected()){
             String i = (tnoDepartamento.getText());
-            CrudDepartamentos cd = new CrudDepartamentos();
+            
             if(cd.delete(i)){
-                System.out.println("xd");
+                commit = 1;
             }else{
                 JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
             }
@@ -362,8 +376,9 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(null, "El numero de departamento debe ser de maximo 4 digitos ");
             }else{   
             Departamento depa = new Departamento(noDp,nombre);
-            CrudDepartamentos cd = new CrudDepartamentos();
+            
             if(cd.modificar(depa)){
+                commit = 1;
             }else{
                 JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
             }}
@@ -412,7 +427,20 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-       setVisible(false);
+       if(commit == 1){
+              int resp = JOptionPane.showConfirmDialog(null, "¿Desea Guardar los cambios?");
+             if(resp==0){
+                 cd.commit();
+            setVisible(false);
+        }else if(resp==1){
+                 cd.rollback();
+            setVisible(false);
+        }else if(resp==2){
+        } 
+         }else{
+                 setVisible(false);
+             }
+       
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void toggBAltasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggBAltasActionPerformed
