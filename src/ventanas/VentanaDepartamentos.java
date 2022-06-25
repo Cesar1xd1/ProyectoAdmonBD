@@ -431,13 +431,28 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
               int resp = JOptionPane.showConfirmDialog(null, "¿Desea Guardar los cambios?");
              if(resp==0){
                  cd.commit();
+                 try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
             setVisible(false);
         }else if(resp==1){
                  cd.rollback();
+                 try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
             setVisible(false);
         }else if(resp==2){
         } 
          }else{
+           try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
                  setVisible(false);
              }
        

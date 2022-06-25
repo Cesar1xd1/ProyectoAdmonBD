@@ -1,6 +1,8 @@
 
 package modelo;
 
+import java.sql.Date;
+
 
 public class Empleado {
         private int noEmpleado;
@@ -71,7 +73,7 @@ public class Empleado {
         return fechaContrato;
     }
 
-    public void setFechaContrato(String fechaContrato) {
+    public void setFechaContrato (String fechaContrato) {
         this.fechaContrato = fechaContrato;
     }
     

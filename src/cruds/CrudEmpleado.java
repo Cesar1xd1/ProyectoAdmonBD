@@ -2,7 +2,9 @@
 package cruds;
 import conexionBD.Conexion;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -53,18 +55,22 @@ public class CrudEmpleado {
    }
    return resultado;
 }   
-   
+public String confecha(String m){
+   String [] x = m.split("/");
+   String y = x[0]+"-"+x[1]+"-"+x[2];
+   return y; 
+}   
 
 public boolean insert(Empleado em){
    boolean resultado = false;
    try{
-   Statement st = conn.createStatement();  
+   Statement st = conn.createStatement();
    String sql = "INSERT INTO employees (emp_no,birth_date,first_name,last_name,gender,hire_date) VALUES ('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";
    st.execute(sql);
    st.close();
    resultado = true;
    }catch (Exception e){
-       
+       System.err.println(e);  
    }
    return resultado;
 }//insert    
@@ -89,7 +95,7 @@ public boolean modificar(Empleado em){
    st.execute(sql);
    st.close();
    resultado = true;
-   //conexion.close();
+  
    }catch (Exception e){ 
    }
    return resultado;

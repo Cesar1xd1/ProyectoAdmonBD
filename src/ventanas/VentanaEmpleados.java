@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
@@ -48,11 +49,11 @@ public class VentanaEmpleados extends javax.swing.JFrame {
 		}
                 
 	}
-    public String laFecha(JComboBox dia,JComboBox mes,JComboBox año){
+    public String laFecha(JComboBox dia, JComboBox mes, JComboBox año){
         String d = (String) dia.getSelectedItem();
         String m = (String) mes.getSelectedItem();
         String a = (String) año.getSelectedItem();
-        return a+"/"+m+"/"+d;
+        return  a+"/"+m+"/"+d;
     }
       public String laFechaG(JComboBox dia,JComboBox mes,JComboBox año){
         String d = (String) dia.getSelectedItem();
@@ -553,13 +554,31 @@ public class VentanaEmpleados extends javax.swing.JFrame {
              if(resp==0){
                  ce.commit();
             setVisible(false);
+                  try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
         }else if(resp==1){
                  ce.rollback();
             setVisible(false);
+                  try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
         }else if(resp==2){
         } 
+             
          }else{
                  setVisible(false);
+                 try {
+                     c.cerrarConexion();
+                 } catch (SQLException ex) {
+                     Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+                 
+                 
              }
         
              

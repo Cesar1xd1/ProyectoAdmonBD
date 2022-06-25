@@ -223,6 +223,7 @@ public class VentanaAdministradores extends javax.swing.JFrame {
         toggBCambios = new javax.swing.JToggleButton();
         jLfiltroConsulta = new javax.swing.JLabel();
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -399,6 +400,13 @@ public class VentanaAdministradores extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Vista-Relacion");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -478,6 +486,8 @@ public class VentanaAdministradores extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(311, 311, 311)
@@ -494,12 +504,15 @@ public class VentanaAdministradores extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)))
+                            .addComponent(jButton1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(toggBAltas)
@@ -684,13 +697,28 @@ public class VentanaAdministradores extends javax.swing.JFrame {
               int resp = JOptionPane.showConfirmDialog(null, "¿Desea Guardar los cambios?");
              if(resp==0){
                  ca.commit();
+                 try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
             setVisible(false);
         }else if(resp==1){
                  ca.rollback();
+                 try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
             setVisible(false);
         }else if(resp==2){
         } 
          }else{
+              try {
+                      c.cerrarConexion();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(VentanaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                  }
                  setVisible(false);
              }
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -841,6 +869,10 @@ public class VentanaAdministradores extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tnoDepartamentoKeyReleased
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new Vista().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -888,6 +920,7 @@ public class VentanaAdministradores extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbMesF;
     private javax.swing.JComboBox<String> cbMesT;
     private javax.swing.JScrollPane escroll;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBFiltroConsulta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
