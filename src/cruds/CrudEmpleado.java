@@ -66,6 +66,7 @@ public boolean insert(Empleado em){
    try{
    Statement st = conn.createStatement();
    String sql = "INSERT INTO employees (emp_no,birth_date,first_name,last_name,gender,hire_date) VALUES ('"+em.getNoEmpleado()+"','"+em.getFechaNacimiento()+"','"+em.getNombre()+"','"+em.getApellido()+"','"+em.getGenero()+"','"+em.getFechaContrato()+"');";
+       System.err.println(sql);
    st.execute(sql);
    st.close();
    resultado = true;

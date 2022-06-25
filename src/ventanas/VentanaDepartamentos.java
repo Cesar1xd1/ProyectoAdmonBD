@@ -36,8 +36,8 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         } 
     public void atuaclizaTabla(JTable tabla) {
 		try {
-
-			String Consulta = "SELECT * FROM departments";		
+                        // f() es una funcion           
+			String Consulta = "SELECT * FROM f()";		
 			ResulSetTableModel modeloDatos = null;
 			try {
 				modeloDatos = new ResulSetTableModel(controlador, url, Consulta);
@@ -68,7 +68,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
     public void contadorR(){
         if(tabla.getRowCount()==0){
                JOptionPane.showMessageDialog(null,"No se encontraron registros");
-               atuaclizaTablaSQL("SELECT * FROM departments");
+               atuaclizaTablaSQL("SELECT * FROM f()");
            }
         
     }
@@ -126,6 +126,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         toggBConsultas = new javax.swing.JToggleButton();
         jLfiltroConsulta = new javax.swing.JLabel();
         jComboBFiltroConsulta = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -237,6 +238,13 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Historial Eliminados");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,16 +253,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(toggBAltas)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(toggBBajas)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(toggBCambios)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(toggBConsultas))
-                            .addComponent(escroll, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(escroll, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,7 +282,18 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
                         .addGap(57, 57, 57))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(toggBAltas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toggBBajas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toggBCambios)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toggBConsultas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(34, 34, 34))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,7 +318,8 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
                             .addComponent(toggBAltas)
                             .addComponent(toggBBajas)
                             .addComponent(toggBCambios)
-                            .addComponent(toggBConsultas))
+                            .addComponent(toggBConsultas)
+                            .addComponent(jButton1))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -362,7 +373,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(null,"El registro no existe y no puede ser eliminado");
             }
-            atuaclizaTablaSQL("SELECT * FROM departments");
+            atuaclizaTablaSQL("SELECT * FROM f()");
             tnoDepartamento.setText("");
             tNombre.setText("");
         }else if(toggBCambios.isSelected()){
@@ -382,11 +393,11 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(null, "Registro existente, si desea modificarlo vaya a MODIFICAR");
             }}
-            atuaclizaTablaSQL("SELECT * FROM departments");
+            atuaclizaTablaSQL("SELECT * FROM f()");
 
         }
         }else if(toggBConsultas.isSelected()){
-            String sql = "SELECT * FROM departments ";
+            String sql = "SELECT * FROM departments";
             if(jComboBFiltroConsulta.getSelectedIndex()==0){
                 if(tnoDepartamento.getText().equals("")){
                     JOptionPane.showMessageDialog(null,"Campo de No. Departamento Vacio!");
@@ -407,7 +418,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
             }else if(jComboBFiltroConsulta.getSelectedIndex()==2){
                 if(tnoDepartamento.getText().equals("")||tNombre.getText().equals("")){
                     JOptionPane.showMessageDialog(null,"Los campos estan vacios");
-                    atuaclizaTablaSQL("SELECT * FROM departments");
+                    atuaclizaTablaSQL("SELECT * FROM f()");
                 }else{
                     sql = sql + "WHERE dept_no LIKE '"+tnoDepartamento.getText() +"%' AND dept_name LIKE '"+tNombre.getText() + "%'";
                     System.out.println(sql);
@@ -422,7 +433,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         limpiarCajas();
-        atuaclizaTablaSQL("SELECT * FROM departments");
+        atuaclizaTablaSQL("SELECT * FROM f()");
 
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
@@ -533,6 +544,10 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tablaMouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       new VentanaDeptEliminados().setVisible(rootPaneCheckingEnabled);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
     public static void main(String args[]) {
         
@@ -549,6 +564,7 @@ public class VentanaDepartamentos extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JScrollPane escroll;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBFiltroConsulta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
